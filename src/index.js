@@ -2,6 +2,9 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import RandomPic from './js/random-pic.js';
+import PicRange from './js/pic-range.js';
+
+// Business Logic 
 
 function getRandomPic() {
   let promise = RandomPic.getRandomPic();
@@ -12,8 +15,17 @@ function getRandomPic() {
   });
 }
 
+function getPicRange(startDate, endDate) {
+  let promise = PicRange.getPicRange(startDate, endDate);
+  promise.then(function(picArray) {
+    printPicArray(picArray); //new function for printing elements?
+  }, function(errorArray){
+    printError(errorArray); //same error?
+  });
+}
 
-// UI LOGIC
+
+// UI Logic
 
 function printElements(data) {
   document.querySelector("#pic-div").innerHTML = `<img src=${data[0].hdurl} alt=${data[0].title} width="700px">`;
@@ -25,7 +37,7 @@ function printElements(data) {
 }
 
 function printError(error) {
-  document.querySelector('#pic-div').innerHTML = `There was an error accessing the weather data for ${error[2]}: ${error[0].status} ${error[0].statusText}: ${error[1].message}`;
+  document.querySelector('#pic-div').innerHTML = `There was an error accessing the photo data for ${error[0]}: ${error[0].msg}.`;
 }
 
 function handleClick() {
@@ -33,7 +45,27 @@ function handleClick() {
   getRandomPic();
 }
 
+function printPicArray(data) {
+  data[0].forEach(function (pic) {
+    const img = document.createElement('img');
+    img.setAttribute('src', pic.url);
+    img.setAttribute('width', '400px');
+    img.setAttribute('class', 'p-4');
+    // document.getElementById('#pic-array').append(img); -- not working for some reason??
+    document.body.append(img);
+  })
+}
+
+function handleSubmit(event) {
+  event.preventDefault();
+  document.querySelector('#pic-array').innerHTML = null;
+  const startInput = document.getElementById('start');
+  const endInput = document.getElementById('end'); 
+  getPicRange(startInput.value, endInput.value);
+}
+
 window.addEventListener("load", function() {
   document.getElementById("show").addEventListener("click", handleClick);
+  document.querySelector("form#pic-range").addEventListener("submit", handleSubmit);
   
 });

@@ -14,5 +14,5 @@ export default class PicRange {
       request.open("GET", url, true);
       request.send();
     })
-  };
+  }
 }

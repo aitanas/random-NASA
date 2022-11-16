@@ -1,5 +1,5 @@
 export default class RandomPic {
-  static getRandomPic() {
+  static getRandomPic() { // static methods call on every object created
     return new Promise(function(resolve, reject) {
       let request = new XMLHttpRequest();
       const url = `https://api.nasa.gov/planetary/apod?count=1&api_key=${process.env.API_KEY}`;
